@@ -4,6 +4,7 @@ import { CategoryTabs } from "@/components/marketplace/CategoryTabs";
 import { HeroBanner } from "@/components/marketplace/HeroBanner";
 import { ProductGrid } from "@/components/marketplace/ProductGrid";
 import { BottomNavigation } from "@/components/marketplace/BottomNavigation";
+import { AiChatLauncher } from "@/components/marketplace/AiChat";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,6 +32,7 @@ function Index() {
       <HeroBanner />
       <ProductGrid />
       <BottomNavigation />
+      <AiChatLauncher />
     </div>
   );
 }
