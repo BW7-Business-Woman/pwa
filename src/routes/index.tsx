@@ -1,26 +1,36 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HeaderSearch } from "@/components/marketplace/HeaderSearch";
+import { CategoryTabs } from "@/components/marketplace/CategoryTabs";
+import { HeroBanner } from "@/components/marketplace/HeroBanner";
+import { ProductGrid } from "@/components/marketplace/ProductGrid";
+import { BottomNavigation } from "@/components/marketplace/BottomNavigation";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "BW7 Marketplace — Conectando mulheres, impulsionando negócios" },
+      {
+        name: "description",
+        content:
+          "Marketplace BW7 Business Woman: compre, venda e fortaleça a rede. Descubra produtos, serviços e comunidade.",
+      },
+      { name: "theme-color", content: "#6C3FB5" },
+      { property: "og:title", content: "BW7 Marketplace" },
+      { property: "og:description", content: "Conectamos mulheres e impulsionamos negócios." },
+    ],
+    links: [{ rel: "manifest", href: "/manifest.json" }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background pb-28 max-w-md mx-auto">
+      <HeaderSearch />
+      <CategoryTabs />
+      <HeroBanner />
+      <ProductGrid />
+      <BottomNavigation />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
