@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Sparkle, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useChat } from "@ai-sdk/react";
@@ -45,19 +45,20 @@ export function AiChatLauncher() {
 
 function ChatSheet({ onClose }: { onClose: () => void }) {
   const [input, setInput] = useState("");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const transport = useRef(new DefaultChatTransport({ api: "/api/chat" })).current;
+  const [transport] = useState(() => new DefaultChatTransport({ api: "/api/chat" }));
 
-  const { messages, sendMessage, status, error } = useChat({
-    transport,
-  });
+  const { messages, sendMessage, status, error } = useChat({ transport });
 
+  const focusInput = () => {
+    requestAnimationFrame(() => {
+      const ta = document.querySelector<HTMLTextAreaElement>("[data-bia-chat] textarea");
+      ta?.focus();
+    });
+  };
+
+  useEffect(focusInput, []);
   useEffect(() => {
-    textareaRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
-    if (status === "ready") textareaRef.current?.focus();
+    if (status === "ready") focusInput();
   }, [status]);
 
   const isLoading = status === "submitted" || status === "streaming";
@@ -83,6 +84,7 @@ function ChatSheet({ onClose }: { onClose: () => void }) {
         exit={{ y: "100%" }}
         transition={{ type: "spring", stiffness: 320, damping: 32 }}
         onClick={(e) => e.stopPropagation()}
+        data-bia-chat
         className="w-full max-w-md h-[88vh] sm:h-[640px] bg-background rounded-t-3xl sm:rounded-3xl shadow-float flex flex-col overflow-hidden"
       >
         {/* Header */}
@@ -166,13 +168,11 @@ function ChatSheet({ onClose }: { onClose: () => void }) {
         {/* Composer */}
         <div className="px-3 pt-2 pb-3 border-t bg-background">
           <PromptInput
-            onSubmit={(_, e) => {
-              e.preventDefault();
-              send(input);
+            onSubmit={(message) => {
+              send(message.text || input);
             }}
           >
             <PromptInputTextarea
-              ref={textareaRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Pergunte algo à Bia..."
