@@ -2,6 +2,7 @@ import { Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Product } from "@/data/products";
 import { useMarketplace } from "@/store/marketplace";
+import { LoadingImage } from "./LoadingImage";
 
 const tagStyles: Record<string, string> = {
   Novo: "bg-mint/90 text-primary-dark",
@@ -10,22 +11,32 @@ const tagStyles: Record<string, string> = {
 };
 
 export function ProductCard({ product }: { product: Product }) {
-  const { favorites, toggleFavorite, addToCart } = useMarketplace();
+  const { favorites, toggleFavorite, addToCart, openProduct } = useMarketplace();
   const fav = favorites.has(product.id);
   return (
     <motion.article
+      role="button"
+      tabIndex={0}
+      onClick={() => openProduct(product.id)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProduct(product.id);
+        }
+      }}
       whileTap={{ scale: 0.97 }}
       whileHover={{ y: -2 }}
       transition={{ type: "spring", stiffness: 300, damping: 22 }}
-      className="group bg-card rounded-2xl shadow-soft overflow-hidden flex flex-col"
+      className="group bg-card rounded-2xl shadow-soft overflow-hidden flex flex-col cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
       <div className="relative aspect-square bg-secondary/40">
-        <img
+        <LoadingImage
           src={product.image}
           alt={product.name}
           loading="lazy"
           width={512}
           height={512}
+          wrapperClassName="h-full w-full"
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         {product.tag && (
@@ -35,7 +46,10 @@ export function ProductCard({ product }: { product: Product }) {
         )}
         <button
           aria-label="Favoritar"
-          onClick={() => toggleFavorite(product.id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            toggleFavorite(product.id);
+          }}
           className="absolute right-2 top-2 h-8 w-8 grid place-items-center rounded-full bg-card/90 backdrop-blur shadow-soft transition-transform active:scale-90"
         >
           <Heart
@@ -58,7 +72,10 @@ export function ProductCard({ product }: { product: Product }) {
           )}
         </div>
         <button
-          onClick={() => addToCart(product.id)}
+          onClick={(event) => {
+            event.stopPropagation();
+            addToCart(product.id);
+          }}
           className="mt-2 h-8 rounded-full bg-primary-soft text-primary text-[12px] font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
         >
           Adicionar

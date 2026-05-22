@@ -1,10 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { HeaderSearch } from "@/components/marketplace/HeaderSearch";
-import { CategoryTabs } from "@/components/marketplace/CategoryTabs";
-import { HeroBanner } from "@/components/marketplace/HeroBanner";
-import { ProductGrid } from "@/components/marketplace/ProductGrid";
-import { BottomNavigation } from "@/components/marketplace/BottomNavigation";
-import { AiChatLauncher } from "@/components/marketplace/AiChat";
+import { MarketplacePage } from "@/components/marketplace/MarketplacePage";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,14 +20,5 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return (
-    <div className="min-h-screen bg-background pb-28 max-w-md mx-auto">
-      <HeaderSearch />
-      <CategoryTabs />
-      <HeroBanner />
-      <ProductGrid />
-      <BottomNavigation />
-      <AiChatLauncher />
-    </div>
-  );
+  return <MarketplacePage routeNav="Início" />;
 }
