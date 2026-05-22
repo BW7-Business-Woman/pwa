@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:netlify": "vite build --config vite.netlify.config.ts && node scripts/prepare-netlify-hosting.cjs",
     "generate:pwa-icons": "node scripts/generate-pwa-icons.cjs",
     "build:dev": "vite build --mode development",
     "backend:dev": "npm --prefix backend run dev",
